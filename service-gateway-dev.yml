@@ -1,0 +1,59 @@
+#注册到Eureka服务中心
+eureka:
+  client:
+    service-url:
+      # 注册到集群，就把多个Eurekaserver地址使用逗号连接起来即可；注册到单实例（非集群模式），那就写一个就ok
+      defaultZone: http://eurekaServerA:8761/eureka,http://eurekaServerB:8762/eureka
+  instance:
+    prefer-ip-address: true  #服务实例中显示ip，而不是显示主机名（兼容老的eureka版本）
+    # 实例名称： 192.168.1.103:lagou-service-resume:8080，我们可以自定义它
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}:@project.version@
+spring:
+  application:
+    name: service-gateway
+  cloud:
+    gateway:
+      routes: # 路由可以有多个
+        - id: service-user # 我们自定义的路由 ID，保持唯一
+          #uri: http://127.0.0.1:8096  # 目标服务地址  自动投递微服务（部署多实例）  动态路由：uri配置的应该是一个服务名称，而不应该是一个具体的服务实例的地址
+          uri: lb://service-user                                                                   # gateway网关从服务注册中心获取实例信息然后负载后路由
+          predicates:                                         # 断言：路由条件，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默 认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）。
+            - Path=/api/user/**
+          filters:
+            - StripPrefix=1
+        - id: service-email      # 我们自定义的路由 ID，保持唯一
+          #uri: http://127.0.0.1:8081       # 目标服务地址
+          #http://localhost:9002/resume/openstate/1545132
+          #http://127.0.0.1:8081/openstate/1545132
+          uri: lb://service-email
+          predicates:                                         # 断言：路由条件，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默 认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）。
+            - Path=/api/email/**
+          filters:
+            - StripPrefix=1
+        - id: service-code
+            #uri: http://127.0.0.1:8081       # 目标服务地址
+            #http://localhost:9002/resume/openstate/1545132
+
+          #http://127.0.0.1:8081/openstate/1545132
+          uri: lb://service-code
+          predicates:                                         # 断言：路由条件，Predicate 接受一个输入参数，返回一个布尔值结果。该接口包含多种默 认方法来将 Predicate 组合成其他复杂的逻辑（比如：与，或，非）。
+            - Path=/api/code/**
+          filters:
+            - StripPrefix=1
+#针对的被调用方微服务名称,不加就是全局生效
+#lagou-service-resume:
+#  ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule #负载策略调整
+# springboot中暴露健康检查等断点接口
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  # 暴露健康接口的细节
+  endpoint:
+    health:
+      show-details: always
+
+exclude:
+  uri: /user,/code
