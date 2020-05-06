@@ -54,6 +54,8 @@ management:
   endpoint:
     health:
       show-details: always
-
 exclude:
   uri: /user,/code
+register:
+  ip:
+    maxTimes: 1
