@@ -39,7 +39,8 @@ management:
 #email服务ribbon
 service-email:
   ribbon:
-    ReadTimeout: 10000
+    ConnectTimeout: 5000
+    ReadTimeout: 20000
     MaxAutoRetries: 1
     MaxAutoRetriesNextServer: 1
     NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
