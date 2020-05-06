@@ -58,4 +58,4 @@ exclude:
   uri: /user,/code
 register:
   ip:
-    maxTimes: 1
+    maxTimes: 2
