@@ -36,3 +36,9 @@ management:
   endpoint:
     health:
       show-details: always
+service-code:
+  ribbon:
+    ReadTimeout: 10000
+    MaxAutoRetries: 1
+    MaxAutoRetriesNextServer: 1
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
