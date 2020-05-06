@@ -59,3 +59,10 @@ exclude:
 register:
   ip:
     maxTimes: 5
+service-user:
+  ribbon:
+    ConnectTimeout: 5000
+    ReadTimeout: 20000
+    MaxAutoRetries: 1
+    MaxAutoRetriesNextServer: 1
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
