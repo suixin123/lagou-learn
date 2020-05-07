@@ -55,7 +55,7 @@ management:
     health:
       show-details: always
 exclude:
-  uri: /user,/code
+  uri: /user/register,/user/isRegistered,/user/login,/code
 register:
   ip:
     maxTimes: 100
