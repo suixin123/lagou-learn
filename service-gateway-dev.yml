@@ -58,7 +58,7 @@ exclude:
   uri: /user,/code
 register:
   ip:
-    maxTimes: 5
+    maxTimes: 100
 service-user:
   ribbon:
     ConnectTimeout: 5000
